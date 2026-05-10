@@ -525,20 +525,7 @@
       document.getElementById('rcnt').textContent = matched.length;
       document.getElementById('rbadge').textContent = matched.length;
 
-      const maskName = (name) => {
-        if (!name) return '';
-        return name.split(' ').map(word => word.length > 1 ? word[0] + '*'.repeat(word.length - 1) : word).join(' ');
-      };
-
-      const maskPhone = (ph) => {
-        if (!ph) return '';
-        const s = String(ph);
-        return s.length > 5 ? '*'.repeat(s.length - 5) + s.slice(-5) : s;
-      };
-
       document.getElementById('rgrid').innerHTML = matched.map(r => {
-        const maskedName = maskName(r.name);
-        const maskedPhone = maskPhone(r.phone);
         const maskedPincode = String(r.pincode || '').replace(/./g, '*');
 
         return `
@@ -546,10 +533,10 @@
       <div class="vo"><span>🔍 View Photo</span></div>
       <img src="${r.photoUrl}" alt="parcel photo" loading="lazy">
       <div class="ci">
-        <div class="cn">👤 ${maskedName}</div>
+        <div class="cn">👤 ${hl(r.name, q)}</div>
         <div class="ml">
           <span class="chip">📍 ${maskedPincode}</span>
-          <span class="chip ph">📞 ${hl(maskedPhone, q)}</span>
+          <span class="chip ph">📞 ${hl(r.phone, q)}</span>
           <span class="chip dt">🕐 ${fmtDate(r.uploadedAt)}</span>
         </div>
       </div>
@@ -561,17 +548,8 @@
       const r = allRecords.find(x => x.id === id);
       if (!r) return;
       document.getElementById('mimg').src = r.photoUrl;
-      const maskName = (name) => {
-        if (!name) return '';
-        return name.split(' ').map(word => word.length > 1 ? word[0] + '*'.repeat(word.length - 1) : word).join(' ');
-      };
-      const maskPhone = (ph) => {
-        if (!ph) return '';
-        const s = String(ph);
-        return s.length > 5 ? '*'.repeat(s.length - 5) + s.slice(-5) : s;
-      };
-      document.getElementById('mname').textContent = `👤 ${maskName(r.name)}`;
-      document.getElementById('mmeta').innerHTML = `<span class="chip">📍 ${String(r.pincode || '').replace(/./g, '*')}</span><span class="chip ph">📞 ${maskPhone(r.phone)}</span><span class="chip dt">🕐 ${fmtDate(r.uploadedAt)}</span>`;
+      document.getElementById('mname').textContent = `👤 ${r.name}`;
+      document.getElementById('mmeta').innerHTML = `<span class="chip">📍 ${String(r.pincode || '').replace(/./g, '*')}</span><span class="chip ph">📞 ${r.phone}</span><span class="chip dt">🕐 ${fmtDate(r.uploadedAt)}</span>`;
       const dl = document.getElementById('mdl');
       dl.href = r.photoUrl; dl.download = `tracking_photo.jpg`;
       document.getElementById('imod').classList.add('open');
