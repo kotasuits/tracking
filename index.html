@@ -526,8 +526,6 @@
       document.getElementById('rbadge').textContent = matched.length;
 
       document.getElementById('rgrid').innerHTML = matched.map(r => {
-        const maskedPincode = String(r.pincode || '').replace(/./g, '*');
-
         return `
     <div class="rc" onclick="openMod('${r.id}')">
       <div class="vo"><span>🔍 View Photo</span></div>
@@ -535,7 +533,7 @@
       <div class="ci">
         <div class="cn">👤 ${hl(r.name, q)}</div>
         <div class="ml">
-          <span class="chip">📍 ${maskedPincode}</span>
+          <span class="chip">📍 ${hl(r.pincode, q)}</span>
           <span class="chip ph">📞 ${hl(r.phone, q)}</span>
           <span class="chip dt">🕐 ${fmtDate(r.uploadedAt)}</span>
         </div>
@@ -549,7 +547,7 @@
       if (!r) return;
       document.getElementById('mimg').src = r.photoUrl;
       document.getElementById('mname').textContent = `👤 ${r.name}`;
-      document.getElementById('mmeta').innerHTML = `<span class="chip">📍 ${String(r.pincode || '').replace(/./g, '*')}</span><span class="chip ph">📞 ${r.phone}</span><span class="chip dt">🕐 ${fmtDate(r.uploadedAt)}</span>`;
+      document.getElementById('mmeta').innerHTML = `<span class="chip">📍 ${r.pincode}</span><span class="chip ph">📞 ${r.phone}</span><span class="chip dt">🕐 ${fmtDate(r.uploadedAt)}</span>`;
       const dl = document.getElementById('mdl');
       dl.href = r.photoUrl; dl.download = `tracking_photo.jpg`;
       document.getElementById('imod').classList.add('open');
